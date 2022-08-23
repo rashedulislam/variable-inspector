@@ -75,7 +75,8 @@
 
 					if ( response.success == true ) {
 
-						$( '#inspection-results' ).remove();
+						$( '#inspection-results' ).empty();
+						$( '#inspection-results' ).prepend('<div class="no-results">There is no data in the inspection log.</div>');
 
 					}
 
@@ -87,10 +88,58 @@
 
 		});
 
-		// Accordion init
+		$("#auto_load").change(function() {
+		    if(this.checked) {
+		        autoReload = setInterval( function(){ AjaxAutoLoad("#inspection-results"); }, 2500);
+		    } else {
+				clearInterval(autoReload);
+			}
+		});
+
+		// simpleAccordion init
 
 		$(".accordion").simpleAccordion();
+
+		// Fomantic UI accordion init
+		
+		$(".ui.accordion").accordion();
 
 	});
 
 })( jQuery );
+
+// Manually reload results
+
+function AjaxManual(selector){(function($){
+	$(selector).css({"opacity":"0.2","pointer-events":"none","cursor":"wait"});
+	AjaxAutoLoad(selector);
+})(jQuery);}
+
+// Auto reload results
+
+var autoReload = null;
+var count = 0;
+function AjaxAutoLoad(selector){(function($){
+	$.ajax({
+        type: "GET",
+        url: window.location.href
+    }).done(function(res){
+    	$(selector).html( $(res).find(selector) );
+		
+		$(".accordion__control").click(function() {
+			$("#auto_load").prop( "checked", false );
+			clearInterval(autoReload);
+			openClose(this);
+		});
+		
+		$(selector).removeAttr("style");
+    });
+	// console.log(count++);
+})(jQuery);}
+
+// Toggle inspection result accordion
+
+function openClose(selector){(function($){
+	$(selector).toggleClass("accordion__control--active");
+	$(selector).parents(".accordion").find(".accordion__panel").slideToggle();
+})(jQuery);}

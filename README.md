@@ -5,7 +5,7 @@ Donate link: https://paypal.me/qriouslad
 Tags: php variables, variable dump, debug, developer  
 Requires at least: 4.8  
 Tested up to: 6.0  
-Stable tag: 1.3.2  
+Stable tag: 1.4.0  
 Requires PHP: 5.6  
 License: GPLv2 or later  
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -41,6 +41,12 @@ This would help you locate and clean up the inspector lines once you're done deb
 * [Github repo](https://github.com/qriouslad/variable-inspector) to contribute code.
 * [Donate](https://paypal.me/qriouslad) and support my work.
 
+### Check These Out Too
+
+* [System Dashboard](https://wordpress.org/plugins/system-dashboard/): Central dashboard to monitor various WordPress components, processes and data, including the server.
+* [Code Explorer](https://wordpress.org/plugins/code-explorer/): Fast directory explorer and file/code viewer with syntax highlighting.
+* [Database Admin](https://github.com/qriouslad/database-admin): Securely manage your WordPress website's database with a clean and user-friendly interface based on a custom-themed Adminer app. Only available on Github.
+
 ## Screenshots
 
 1. The main Variable Inspector page
@@ -53,6 +59,11 @@ This would help you locate and clean up the inspector lines once you're done deb
 Variable Inspector was built with: [WordPress Plugin Boilerplate](https://github.com/devinvinson/WordPress-Plugin-Boilerplate/) | [wppb.me](https://wppb.me/) | [CodeStar framework](https://github.com/Codestar/codestar-framework) | [Simple Accordion](https://codepen.io/gecugamo/pen/xGLyXe) | [Fomantic UI](https://fomantic-ui.com/). It was originally inspired by [WP Logger](https://wordpress.org/plugins/wp-data-logger/).
 
 ## Changelog
+
+### 1.4.0 (2022.08.18)
+
+* Add Refresh button and "Auto refresh" checkbox to load latest results. Props to [@imantsk](https://github.com/imantsk) for the [code and suggestion](https://github.com/qriouslad/variable-inspector/issues/3)
+* Add quick tutorial on the inspector results page to enable users to quickly reference the inspector code
 
 ### 1.3.2 (2022.05.26)
 

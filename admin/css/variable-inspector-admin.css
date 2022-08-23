@@ -60,6 +60,37 @@
     color: #3c434a;
 }
 
+.vi .results-options {
+    display: flex;
+    align-items: center;
+}
+
+.vi .autorefresh-results {
+    margin-right: 8px;
+}
+
+.vi .refresh-results {
+    margin-right: 8px;
+}
+
+.vi .no-results {
+    padding-top: 1.5em;
+    padding-bottom: 1.5em;
+    border-bottom:  1px solid #ddd;
+}
+
+.vi .inspector-footer {
+}
+
+.vi .ui.accordion {
+    margin: 1.5em 0 0;
+}
+
+.vi .ui.accordion .title:not(.ui) {
+    font-family: inherit;
+    color: inherit;
+}
+
 /* Accordion */
 
 .vi .accordion {
