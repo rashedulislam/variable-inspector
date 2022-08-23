@@ -85,9 +85,11 @@ class Variable_Inspector_Admin {
 		 * class.
 		 */
 
-		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/variable-inspector-admin.css', array(), $this->version, 'all' );
-
 		wp_enqueue_style( $this->plugin_name . '-fomantic-ui-tab', plugin_dir_url( __FILE__ ) . 'css/fomantic-ui/tab.css', array(), $this->version, 'all' );
+
+		wp_enqueue_style( $this->plugin_name . '-fomantic-ui-accordion', plugin_dir_url( __FILE__ ) . 'css/fomantic-ui/accordion.css', array(), $this->version, 'all' );
+
+		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/variable-inspector-admin.css', array(), $this->version, 'all' );
 
 	}
 
@@ -110,9 +112,11 @@ class Variable_Inspector_Admin {
 		 * class.
 		 */
 
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/variable-inspector-admin.js', array( 'jquery' ), $this->version, false );
-
 		wp_enqueue_script( $this->plugin_name . '-fomantic-ui-tab', plugin_dir_url( __FILE__ ) . 'js/fomantic-ui/tab.js', array( 'jquery' ), $this->version, false );
+
+		wp_enqueue_script( $this->plugin_name . '-fomantic-ui-accordion', plugin_dir_url( __FILE__ ) . 'js/fomantic-ui/accordion.js', array( 'jquery' ), $this->version, false );
+
+		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/variable-inspector-admin.js', array( 'jquery' ), $this->version, false );
 
 	}
 
@@ -260,129 +264,143 @@ class Variable_Inspector_Admin {
 
 		$output = '';
 
+		$output .= '<div class="inspector-header"><h2>Results</h2><div class="results-options"><label for="auto_load" class="autorefresh-results"><input type="checkbox" id="auto_load" name="auto_load" value="auto_load">Auto refresh</label><a class="button refresh-results" onclick="AjaxManual(\'#inspection-results\')">Refresh</a><a class="button clear-results" href="" data-status="info">Clear</a></div></div>';
+
+		$output .= '<div id="inspection-results" class="inspection-results">';
+
 		if ( empty( $inspection_results ) || ! is_array( $inspection_results ) ) {
+			$output .= '<div class="no-results">There is no data in the inspection log.</div>';
+		}
 
-			$output .= '<p>There is no data in the inspection log.</p>';
+		foreach( $inspection_results as $variable ) {
 
-		} else {
+			$inspection_time = date( 'H:i:s', strtotime( $variable['date'] ) );
+			$inspection_time_hi = date( 'H:i', strtotime( $variable['date'] ) );
+			$inspection_time_s = date( ':s', strtotime( $variable['date'] ) );
+			$inspection_time_formatted = '<span class="time-hi">'. $inspection_time_hi . '</span><span class="time-s">'. $inspection_time_s . '</span>';
+			$inspection_time_numeric = date( 'His', strtotime( $variable['date'] ) );
 
-			$output .= '<div class="inspector-header"><h2>Results</h2><a class="button clear-results" href="" data-status="info">Clear Results</a></div>';
+			$variable_type = $variable['type'];
 
-			$output .= '<div id="inspection-results" class="inspection-results">';
+			switch( $variable_type ) {
 
-			foreach( $inspection_results as $variable ) {
+				case 'boolean':
+				$variable_content = (bool) maybe_unserialize( $variable['content'] );
+				break;
 
-				$inspection_time = date( 'H:i:s', strtotime( $variable['date'] ) );
-				$inspection_time_hi = date( 'H:i', strtotime( $variable['date'] ) );
-				$inspection_time_s = date( ':s', strtotime( $variable['date'] ) );
-				$inspection_time_formatted = '<span class="time-hi">'. $inspection_time_hi . '</span><span class="time-s">'. $inspection_time_s . '</span>';
-				$inspection_time_numeric = date( 'His', strtotime( $variable['date'] ) );
+				case 'integer':
+				$variable_content = (int) maybe_unserialize( $variable['content'] );
+				break;
 
-				$variable_type = $variable['type'];
+				case 'string':
+				$variable_content = (string) maybe_unserialize( $variable['content'] );
+				break;
 
-				switch( $variable_type ) {
+				case 'array':
+				$variable_content = (array) maybe_unserialize( $variable['content'] );
+				break;
 
-					case 'boolean':
-					$variable_content = (bool) maybe_unserialize( $variable['content'] );
-					break;
+				case 'object':
+				$variable_content = (object) maybe_unserialize( $variable['content'] );
+				break;
+			}
 
-					case 'integer':
-					$variable_content = (int) maybe_unserialize( $variable['content'] );
-					break;
+			$variable_name_plain = $variable['name'];
+			$variable_name = '$' . $variable['name'];
 
-					case 'string':
-					$variable_content = (string) maybe_unserialize( $variable['content'] );
-					break;
+			$identifier = $variable_name_plain .'-'. $inspection_time_numeric;
 
-					case 'array':
-					$variable_content = (array) maybe_unserialize( $variable['content'] );
-					break;
+			$origin_script_path = $variable['file_path'];
+			$origin_script_line = $variable['line_number'];
 
-					case 'object':
-					$variable_content = (object) maybe_unserialize( $variable['content'] );
-					break;
-				}
+			$type_tag = '<span class="variable-type">' . esc_html( $variable_type ) . '</span>';
 
-				$variable_name_plain = $variable['name'];
-				$variable_name = '$' . $variable['name'];
+			ob_start();
+			var_dump( $variable_content );
+			$variable_content_vardump = ob_get_clean();
 
-				$identifier = $variable_name_plain .'-'. $inspection_time_numeric;
+			$variable_content_varexport = var_export( $variable_content, true );
 
-				$origin_script_path = $variable['file_path'];
-				$origin_script_line = $variable['line_number'];
+			if ( !empty( $origin_script_path ) ) {
 
-				$type_tag = '<span class="variable-type">' . esc_html( $variable_type ) . '</span>';
+				if ( !empty( $origin_script_line ) ) {
 
-				ob_start();
-				var_dump( $variable_content );
-				$variable_content_vardump = ob_get_clean();
+					$origin_script = $origin_script_path . ':' . $origin_script_line;
 
-				$variable_content_varexport = var_export( $variable_content, true );
+				} else {
 
-				if ( !empty( $origin_script_path ) ) {
-
-					if ( !empty( $origin_script_line ) ) {
-
-						$origin_script = $origin_script_path . ':' . $origin_script_line;
-
-					} else {
-
-						$origin_script = $origin_script_path;
-
-					}
+					$origin_script = $origin_script_path;
 
 				}
 
-				$output .= '<div class="inspection-result">';
+			}
 
-				$output .= '<div class="inspection-time">' . $inspection_time_formatted . '</div>';
+			$output .= '<div class="inspection-result">';
 
-				$output .= '<div class="accordion inspection-accordion">';
-				
-				$output .= '<div class="accordion__control">' . esc_html( $variable_name ) . $type_tag . '<span class="accordion__indicator"></span></div>';
+			$output .= '<div class="inspection-time">' . $inspection_time_formatted . '</div>';
 
-				$separator = '<span class="separator">&lrhar;</span>';
+			$output .= '<div class="accordion inspection-accordion">';
+			
+			$output .= '<div class="accordion__control">' . esc_html( $variable_name ) . $type_tag . '<span class="accordion__indicator"></span></div>';
 
-				$output .= '
-							<div id="'. esc_html( $identifier ) .'" class="accordion__panel">
-								<div class="functions">
-									<a class="item" data-tab="third">var_export</a>'.$separator.'<a class="item" data-tab="second">var_dump</a>'.$separator.'<a class="item" data-tab="first">print_r</a>
-								</div>
-								<div class="ui tab" data-tab="third">
-						       		<pre>' . $variable_content_varexport . '</pre>
-								</div>
-								<div class="ui tab" data-tab="second">
-						       		<pre>' . $variable_content_vardump . '</pre>
-								</div>
-								<div class="ui tab" data-tab="first">
-						       		<pre>' . print_r( $variable_content, true ) . '</pre>
-								</div>
-								<script>
-									jQuery("#'. esc_html( $identifier ) .' .functions .item")
-									  .tab({
-									  		context: jQuery("#'. esc_html( $variable_name_plain .'-'. $inspection_time_numeric ) .'")
-									  	})
-									;
-								</script>
+			$separator = '<span class="separator">&lrhar;</span>';
 
+			$output .= '
+						<div id="'. esc_html( $identifier ) .'" class="accordion__panel">
+							<div class="functions">
+								<a class="item" data-tab="third">var_export</a>'.$separator.'<a class="item" data-tab="second">var_dump</a>'.$separator.'<a class="item" data-tab="first">print_r</a>
 							</div>
-							';
+							<div class="ui tab" data-tab="third">
+					       		<pre>' . $variable_content_varexport . '</pre>
+							</div>
+							<div class="ui tab" data-tab="second">
+					       		<pre>' . $variable_content_vardump . '</pre>
+							</div>
+							<div class="ui tab" data-tab="first">
+					       		<pre>' . print_r( $variable_content, true ) . '</pre>
+							</div>
+							<script>
+								jQuery("#'. esc_html( $identifier ) .' .functions .item")
+								  .tab({
+								  		context: jQuery("#'. esc_html( $variable_name_plain .'-'. $inspection_time_numeric ) .'")
+								  	})
+								;
+							</script>
 
-				if ( !empty( $origin_script_path ) ) {
+						</div>
+						';
 
-					$output .= '<div class="inspection-origin">' . esc_html( $origin_script ) .  '</div>';
+			if ( !empty( $origin_script_path ) ) {
 
-				}
-
-				$output .='</div>';
-
-				$output .='</div>';
+				$output .= '<div class="inspection-origin">' . esc_html( $origin_script ) .  '</div>';
 
 			}
 
 			$output .='</div>';
 
+			$output .='</div>';
+
 		}
+
+		$output .='</div>';
+
+		$output .= '
+			<div class="inspector-footer">
+			  <div class="ui accordion">
+			    <div class="title">
+			      <i class="dropdown icon"></i>
+			      How do I use Variable Inspector?
+			    </div>
+			    <div class="content">
+			      <p>Simply place the following line anywhere in your code after the $variable_name you’d like to inspect:</p>
+			      <pre><code>do_action( \'inspect\', [ \'variable_name\', $variable_name ] );</code></pre>
+			      <p>If you’d like to record the originating PHP file and line number, append the PHP magic constants __FILE__ and __LINE__ as follows:</p>
+			      <pre><code>do_action( \'inspect\', [ \'variable_name\', $variable_name, __FILE__, __LINE__ ] );</code></pre>
+			      <p>This would help you locate and clean up the inspector lines once you’re done debugging.</p>
+			    </div>
+			  </div>
+			</div>
+		';
 
 		return $output;
 	
