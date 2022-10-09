@@ -118,6 +118,8 @@ class Variable_Inspector_Admin {
 
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/variable-inspector-admin.js', array( 'jquery' ), $this->version, false );
 
+		wp_enqueue_script( $this->plugin_name . '-jsticky-mod', plugin_dir_url( __FILE__ ) . 'js/jquery.jsticky.mod.min.js', array( 'jquery' ), $this->version, false );
+
 	}
 
 	/**
@@ -384,8 +386,52 @@ class Variable_Inspector_Admin {
 
 		$output .='</div>';
 
-		$output .= '
-			<div class="inspector-footer">
+		return $output;
+	
+	}
+
+	/**
+	 * Register admin menu
+	 *
+	 * @since 1.5.0
+	 */
+	public function vi_register_admin_menu() {
+
+		add_submenu_page(
+			'tools.php',
+			__( 'Variable Inspector', 'variable-inspector' ),
+			__( 'Variable Inspector', 'variable-inspector' ),
+			'manage_options',
+			'variable-inspector',
+			[ $this, 'vi_create_main_page' ]
+		);
+
+	}
+
+	/**
+	 * Create the main page in wp-admin
+	 *
+	 * @since 1.5.0
+	 */
+	public function vi_create_main_page() {
+
+		?>
+		<div class="wrap vi">
+			<div id="vi-header" class="vi-header">
+				<div class="vi-header-left">
+					<h1 class="vi-heading"><?php esc_html_e( 'Variable Inspector', 'variable-inspector' ); ?> <small><?php esc_html_e( 'by', 'variable-inspector' ); ?> <a href="https://bowo.io" target="_blank">bowo.io</a></small></h1>
+				</div>
+				<div class="vi-header-right">
+					<a href="https://wordpress.org/plugins/variable-inspector/" target="_blank" class="vi-header-action"><span>&#8505;</span> <?php esc_html_e( 'Info', 'variable-inspector' ); ?></a>
+					<a href="https://wordpress.org/plugins/variable-inspector/#reviews" target="_blank" class="vi-header-action"><span>★</span> <?php esc_html_e( 'Review', 'variable-inspector' ); ?></a>
+					<a href="https://wordpress.org/support/plugin/variable-inspector/" target="_blank" class="vi-header-action">✚ <?php esc_html_e( 'Feedback', 'variable-inspector' ); ?></a>
+					<a href="https://paypal.me/qriouslad" target="_blank" class="vi-header-action">&#10084; <?php esc_html_e( 'Donate', 'variable-inspector' ); ?></a>
+				</div>
+			</div>
+			<div class="vi-body">
+			<?php echo $this->vi_inspection_results(); ?>
+			</div>
+			<div class="vi-footer">
 			  <div class="ui accordion">
 			    <div class="title">
 			      <i class="dropdown icon"></i>
@@ -393,71 +439,26 @@ class Variable_Inspector_Admin {
 			    </div>
 			    <div class="content">
 			      <p>Simply place the following line anywhere in your code after the $variable_name you’d like to inspect:</p>
-			      <pre><code>do_action( \'inspect\', [ \'variable_name\', $variable_name ] );</code></pre>
+			      <pre><code>do_action( 'inspect', [ 'variable_name', $variable_name ] );</code></pre>
 			      <p>If you’d like to record the originating PHP file and line number, append the PHP magic constants __FILE__ and __LINE__ as follows:</p>
-			      <pre><code>do_action( \'inspect\', [ \'variable_name\', $variable_name, __FILE__, __LINE__ ] );</code></pre>
+			      <pre><code>do_action( 'inspect', [ 'variable_name', $variable_name, __FILE__, __LINE__ ] );</code></pre>
 			      <p>This would help you locate and clean up the inspector lines once you’re done debugging.</p>
 			    </div>
 			  </div>
 			</div>
-		';
-
-		return $output;
-	
+		</div>
+		<?php
 	}
 
 	/**
-	 * Add the main page in wp-admin
+	 * Update footer text
 	 *
-	 * @since 1.0.0
+	 * @since 1.5.0
 	 */
-	public function vi_main_page() {
-
-		if ( class_exists( 'CSF' ) ) {
-
-			// Set a unique slug-like ID
-
-			$prefix = 'variable-inspector';
-
-			CSF::createOptions ( $prefix, array(
-
-				'menu_title' 		=> 'Variable Inspector',
-				'menu_slug' 		=> 'variable-inspector',
-				'menu_type'			=> 'submenu',
-				'menu_parent'		=> 'tools.php',
-				'menu_position'		=> 1,
-				'framework_title' 	=> 'Variable Inspector <small>by <a href="https://bowo.io" target="_blank">bowo.io</a></small>',
-				'framework_class' 	=> 'vi',
-				'show_bar_menu' 	=> false,
-				'show_search' 		=> false,
-				'show_reset_all' 	=> false,
-				'show_reset_section' => false,
-				'show_form_warning' => false,
-				'sticky_header'		=> true,
-				'save_defaults'		=> true,
-				'show_footer' 		=> false,
-				'footer_credit'		=> '<a href="https://wordpress.org/plugins/variable-inspector/" target="_blank">Variable Inspector</a> (<a href="https://github.com/qriouslad/variable-inspector" target="_blank">github</a>) is built with the <a href="https://github.com/devinvinson/WordPress-Plugin-Boilerplate/" target="_blank">WordPress Plugin Boilerplate</a>, <a href="https://wppb.me" target="_blank">wppb.me</a> and <a href="https://github.com/Codestar/codestar-framework" target="_blank">CodeStar</a>.',
-
-			) );
-
-			CSF::createSection( $prefix, array(
-
-				'title'		=> 'The Inspector',
-				'fields'	=> array(
-
-					array(
-						'type'		=> 'content',
-						'title'		=> '',
-						'class'		=> 'vi-body',
-						'content'	=> $this->vi_inspection_results(),
-					),
-
-				),
-
-			) );
-
-		}
-
+	public function vi_footer_text() {
+		?>
+		<a href="https://wordpress.org/plugins/variable-inspector/" target="_blank">Variable Inspector</a> (<a href="https://github.com/qriouslad/variable-inspector" target="_blank">github</a>) is built with the <a href="https://github.com/devinvinson/WordPress-Plugin-Boilerplate/" target="_blank">WordPress Plugin Boilerplate</a>, <a href="https://wppb.me" target="_blank">wppb.me</a> and <a href="https://github.com/AndrewHenderson/jSticky" target="_blank">jSticky</a>.
+		<?php
 	}
 
 	/**
@@ -472,45 +473,6 @@ class Variable_Inspector_Admin {
 		array_unshift( $links, $action_link );
 
 		return $links;
-
-	}
-
-	/**
-	 * Register a submenu directly with WP core function
-	 *
-	 * @since 1.0.0
-	 */
-	public function vi_register_submenu() {
-
-		add_submenu_page(
-			'tools.php',
-			'Variable Inspector',
-			'Variable Inspector',
-			'manage_options',
-			'variable-inspector',
-			'vi_register_submenu_callback'
-		);
-	}
-
-	/**
-	 * Skeleton callback function for submenu registration
-	 *
-	 * @since 1.0.0
-	 */
-	public function vi_register_submenu_callback() {
-
-		echo 'Nothing to show here...';
-
-	}
-
-	/**
-	 * Remove CodeStar framework welcome / ads page
-	 *
-	 * @since 1.0.0
-	 */
-	public function vi_remove_codestar_submenu() {
-
-		remove_submenu_page( 'tools.php', 'csf-welcome' );
 
 	}
 

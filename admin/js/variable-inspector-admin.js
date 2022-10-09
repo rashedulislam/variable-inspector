@@ -46,15 +46,14 @@
 
 	$(document).ready( function() {
 
-		// Append links to plugin's main page header
-
-        var addReview = '<a href="https://wordpress.org/plugins/variable-inspector/#reviews" target="_blank" class="header-action"><span>&starf;</span> Review</a>';
-        var giveFeedback = '<a href="https://wordpress.org/support/plugin/variable-inspector/" target="_blank" class="header-action">&#10010; Feedback</a>';
-        var donate = '<a href="https://paypal.me/qriouslad" target="_blank" class="header-action">&#10084; Donate</a>';
-
-        $(donate).prependTo('.vi .csf-header-right');
-        $(giveFeedback).prependTo('.vi .csf-header-right');
-        $(addReview).prependTo('.vi .csf-header-right');
+		// Make page header sticky on scroll. Using https://github.com/AndrewHenderson/jSticky
+		
+		$('#vi-header').sticky({
+			topSpacing: 0, // Space between element and top of the viewport (in pixels)
+			zIndex: 100, // z-index
+			stopper: '', // Id, class, or number value
+			stickyClass: 'vi-sticky' // Class applied to element when it's stuck. Class name or false.
+		})
 
         // Clear inspection results
 
