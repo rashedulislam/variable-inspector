@@ -3,49 +3,90 @@
  * included in this file.
  */
 
-.vi .csf-header-inner {
-    background-color: #fafafa;
-    border-bottom: 1px solid #f5f5f5;
-    padding: 25px 30px;
-}
-
-.csf-theme-dark.vi .csf-header-inner h1 {
-    color:  #23282d;
-}
-
-.vi .csf-header-inner h1 small {
-    font-size: 14px;
-}
-
-.vi .csf-buttons {
+#screen-meta-links {
     display: none;
 }
 
-.vi .csf-header a {
+/* Header */
+
+.vi-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 24px;
+    padding: 20px;
+    background-color: #fafafa;
+    border-bottom: 1px solid #f5f5f5;
+    transition: .25s;
+}
+
+.vi-header.vi-sticky {
+    box-shadow: 0 5px 10px rgb(0 0 0 / 10%);
+}
+
+.vi-header-left {
+}
+
+.vi-header-right {
+    display: flex;
+}
+
+.vi-body {
+    padding: 20px;
+    background-color: #fff;
+}
+
+.vi-footer {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 12px 20px;
+    background-color: #fafafa;
+    border-top: 1px solid #f5f5f5;
+}
+
+.wrap h1.vi-heading {
+    font-size: 1.5em;
+    line-height: 26px;
+    font-weight: 400;
+    margin: 0;
+    padding: 0;
+}
+
+.vi-heading a {
     text-decoration: none;
     transition: .25s;
 }
 
-.vi .vi-header-action span {
-    font-size: 1.125em;
-}
-
-.vi .csf-header a:hover {
+.vi-heading a:hover {
     text-decoration: underline;
 }
 
-.vi .header-action {
-    line-height: 30px;
+.vi-heading small {
+    font-size: 14px;
+    font-weight: 500;
+    color: #555;
+}
+
+.vi-header-action {
     margin-left: 16px;
+    text-decoration: none;
+    transition: .25s;
+    line-height: 30px;
 }
 
-.vi .header-action span {
-    font-size: 1.125em;
-}
-
-.vi .header-action:first-child {
+.vi-header-action:first-child {
     margin-left: 0;
 }
+
+.vi-header-action:hover {
+    text-decoration: underline;
+}
+
+/* Body */
 
 .vi .inspector-header {
     display: flex;
@@ -83,12 +124,16 @@
 }
 
 .vi .ui.accordion {
-    margin: 1.5em 0 0;
+    margin: 0;
 }
 
 .vi .ui.accordion .title:not(.ui) {
     font-family: inherit;
     color: inherit;
+}
+
+.vi .ui.accordion .title.active {
+    border-bottom: 1px solid #ddd;
 }
 
 /* Accordion */
@@ -147,6 +192,14 @@
     align-items: flex-start;
     justify-content: space-between;
     border-bottom: 1px solid #ddd;
+}
+
+.vi .inspection-result:last-of-type {
+    border-bottom: none;
+}
+
+.vi .inspection-result:last-of-type .accordion {
+    margin-bottom: 0;
 }
 
 .vi .inspection-time {

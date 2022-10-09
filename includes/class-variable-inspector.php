@@ -122,11 +122,6 @@ class Variable_Inspector {
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-variable-inspector-public.php';
 
-		/**
-		 * Include CodeStar framework
-		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'vendor/codestar-framework/codestar-framework.php';
-
 		$this->loader = new Variable_Inspector_Loader();
 
 	}
@@ -181,20 +176,17 @@ class Variable_Inspector {
 
 		$plugin_admin = new Variable_Inspector_Admin( $this->get_plugin_name(), $this->get_version() );
 
-		$this->loader->add_action( 'admin_menu', $plugin_admin, 'vi_remove_codestar_submenu' );
-
 		if ( is_admin() && $this->is_vi() ) {
 
 			$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 			$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
 
-			$this->loader->add_action( 'csf_loaded', $plugin_admin, 'vi_main_page' );
-
-		} else {
-
-			$this->loader->add_action( 'admin_menu', $plugin_admin, 'vi_register_submenu' );
+			// Update footer text
+			$this->loader->add_filter( 'admin_footer_text', $plugin_admin, 'vi_footer_text' );
 
 		}
+
+		$this->loader->add_action( 'admin_menu', $plugin_admin, 'vi_register_admin_menu');
 
 		$this->loader->add_filter( 'plugin_action_links_'.$this->plugin_name.'/'.$this->plugin_name.'.php', $plugin_admin, 'vi_plugin_action_links' );
 
