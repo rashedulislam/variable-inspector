@@ -91,8 +91,8 @@
 .vi .inspector-header {
     display: flex;
     flex-direction: row;
-    align-items: center;
     justify-content: space-between;
+    align-items: center;
     border-bottom: 1px solid #ddd;
     margin-top: -1.5em;
 }
@@ -101,8 +101,19 @@
     color: #3c434a;
 }
 
+.vi .results-operations {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.vi .toggle-results {
+    margin-left: 8px;
+}
+
 .vi .results-options {
     display: flex;
+    justify-content: flex-start;
     align-items: center;
 }
 

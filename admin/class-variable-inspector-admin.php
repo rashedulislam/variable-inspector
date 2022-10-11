@@ -266,7 +266,7 @@ class Variable_Inspector_Admin {
 
 		$output = '';
 
-		$output .= '<div class="inspector-header"><h2>Results</h2><div class="results-options"><label for="auto_load" class="autorefresh-results"><input type="checkbox" id="auto_load" name="auto_load" value="auto_load">Auto refresh</label><a class="button refresh-results" onclick="AjaxManual(\'#inspection-results\')">Refresh</a><a class="button clear-results" href="" data-status="info">Clear</a></div></div>';
+		$output .= '<div class="inspector-header"><div class="results-operations"><h2>Results</h2><a class="button toggle-results">Expand all</a></div><div class="results-options"><label for="auto_load" class="autorefresh-results"><input type="checkbox" id="auto_load" name="auto_load" value="auto_load">Auto refresh</label><a class="button refresh-results" onclick="AjaxManual(\'#inspection-results\')">Refresh</a><a class="button clear-results" href="" data-status="info">Clear</a></div></div>';
 
 		$output .= '<div id="inspection-results" class="inspection-results">';
 
