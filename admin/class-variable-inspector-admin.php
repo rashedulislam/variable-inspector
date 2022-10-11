@@ -120,6 +120,19 @@ class Variable_Inspector_Admin {
 
 		wp_enqueue_script( $this->plugin_name . '-jsticky-mod', plugin_dir_url( __FILE__ ) . 'js/jquery.jsticky.mod.min.js', array( 'jquery' ), $this->version, false );
 
+		$vi_default_options = array(
+			'viewer'	=> 'var_export',
+		);
+		$vi_options = get_option( 'variable_inspector', $vi_default_options );
+
+		wp_localize_script(
+			$this->plugin_name,
+			'viVars',
+			array(
+				'viewer'	=> $vi_options['viewer'],
+			)
+		);
+
 	}
 
 	/**
@@ -266,7 +279,25 @@ class Variable_Inspector_Admin {
 
 		$output = '';
 
-		$output .= '<div class="inspector-header"><div class="results-operations"><h2>Results</h2><a class="button toggle-results">Expand all</a></div><div class="results-options"><label for="auto_load" class="autorefresh-results"><input type="checkbox" id="auto_load" name="auto_load" value="auto_load">Auto refresh</label><a class="button refresh-results" onclick="AjaxManual(\'#inspection-results\')">Refresh</a><a class="button clear-results" href="" data-status="info">Clear</a></div></div>';
+		$output .= '
+			<div class="inspector-header">
+				<h2>Results</h2>
+				<div class="inspector-actions">
+					<div class="results-operations">
+						<select name="results_viewer" id="results_viewer" class="results-viewer" data-viewer="">
+							<option value="var_export">var_export</option>
+							<option value="var_dump">var_dump</option>
+							<option value="print_r">print_r</option>
+						</select>
+						<a class="button toggle-results">Expand all</a>
+					</div>
+					<div class="results-options">
+						<label for="auto_load" class="autorefresh-results"><input type="checkbox" id="auto_load" name="auto_load" value="auto_load">Auto refresh</label>
+						<a class="button refresh-results" onclick="AjaxManual(\'#inspection-results\')">Refresh</a>
+						<a class="button clear-results" href="" data-status="info">Clear</a>
+					</div>
+				</div>
+			</div>';
 
 		$output .= '<div id="inspection-results" class="inspection-results">';
 
@@ -474,6 +505,35 @@ class Variable_Inspector_Admin {
 
 		return $links;
 
+	}
+
+	/**
+	 * Set default / all results viewer, e.g. var_export
+	 *
+	 * @since 1.7.0
+	 */
+	public function vi_set_viewer() {
+
+		if ( isset( $_REQUEST ) ) {
+
+			$viewer = $_REQUEST['viewer'];
+
+		    update_option( 
+		    	'variable_inspector', 
+		    	array( 
+		    		'viewer' => $viewer, 
+		    	), 
+		    	false 
+		    );
+
+		    $response = array(
+		    	'status'	=> 'success',
+		    	'viewer'	=> $viewer,
+		    );
+
+		    echo json_encode( $response );
+
+		}
 	}
 
 }

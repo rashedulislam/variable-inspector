@@ -194,6 +194,8 @@ class Variable_Inspector {
 
 		$this->loader->add_action( 'wp_ajax_vi_clear_results', $plugin_admin, 'vi_clear_results' );
 
+		$this->loader->add_action( 'wp_ajax_vi_set_viewer', $plugin_admin, 'vi_set_viewer' );
+
 	}
 
 	/**

@@ -44,6 +44,26 @@
 		return this;
 	}
 
+	// Set viewer for all results
+	
+	function setViewer( viewer ) {
+
+		if ( viewer == 'var_export' ) {
+			$('.item[data-tab="third"]').each( function() {
+				$( this ).click();
+			});
+		} else if ( viewer == 'var_dump' ) {
+			$('.item[data-tab="second"]').each( function() {
+				$( this ).click();
+			});
+		} else if ( viewer == 'print_r' ) {
+			$('.item[data-tab="first"]').each( function() {
+				$( this ).click();
+			});
+		}
+
+	}
+
 	$(document).ready( function() {
 
 		// Make page header sticky on scroll. Using https://github.com/AndrewHenderson/jSticky
@@ -56,6 +76,7 @@
 		})
 
 		// Expand or collapse all individual results
+
 		$('.toggle-results').click( function() {
 			var text = $( this ).html();
 			if ( text == 'Expand all' ) {
@@ -73,6 +94,41 @@
 					}
 				});
 			} else {}
+		});
+
+		// Set the viewer from WP options via get_option -> wp_localize_script
+
+		var viewer = viVars.viewer;
+		// alert( 'Current viewer is ' + viewer );
+		$('#results_viewer').val(viewer).change();
+
+		setViewer( viewer );
+
+		// Select the (default) viewer
+		
+		$('#results_viewer').change( function() {
+
+			var viewer = $( this ).find("option:selected").attr('value');
+			// alert( $( this ).find("option:selected").attr('value') );
+
+			setViewer( viewer );
+
+			$.ajax({
+				url: ajaxurl,
+				data: {
+					'action': 'vi_set_viewer',
+					'viewer': viewer
+				},
+				success:function(data) {
+					// var data = data.slice(0,-1); // remove strange trailing zero in string returned by AJAX call
+					// const response = JSON.parse(data); // create an object
+					// alert( 'Viewer has been set to ' + response.viewer );
+				},
+				error:function(errorThrown) {
+					console.log(errorThrown);
+				}
+			});
+
 		});
 
         // Clear inspection results
