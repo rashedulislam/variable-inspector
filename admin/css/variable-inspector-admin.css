@@ -98,7 +98,16 @@
 }
 
 .vi .inspector-header h2 {
+    width: 10%;
     color: #3c434a;
+}
+
+.vi .inspector-actions {
+    width: 90%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .vi .results-operations {
@@ -107,8 +116,12 @@
     align-items: center;
 }
 
+.vi .results-viewer {
+    margin-right: 8px;
+}
+
 .vi .toggle-results {
-    margin-left: 8px;
+    margin-right: 8px;
 }
 
 .vi .results-options {
