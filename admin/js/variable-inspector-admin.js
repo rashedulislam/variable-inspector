@@ -55,6 +55,26 @@
 			stickyClass: 'vi-sticky' // Class applied to element when it's stuck. Class name or false.
 		})
 
+		// Expand or collapse all individual results
+		$('.toggle-results').click( function() {
+			var text = $( this ).html();
+			if ( text == 'Expand all' ) {
+				$( this ).html( 'Collapse all' );
+				$('.accordion__control').each( function() {
+					if ( ! $( this ).hasClass( 'accordion__control--active' ) ) {
+						$( this ).addClass( 'accordion__control--active' ).next().slideToggle(250);
+					}
+				});
+			} else if ( text == 'Collapse all' ) {
+				$( this ).html( 'Expand all' );
+				$('.accordion__control').each( function() {
+					if ( $( this ).hasClass( 'accordion__control--active' ) ) {
+						$( this ).removeClass( 'accordion__control--active' ).next().slideToggle(250);
+					}
+				});
+			} else {}
+		});
+
         // Clear inspection results
 
 		$('.clear-results').click( function( eventObject ) {
