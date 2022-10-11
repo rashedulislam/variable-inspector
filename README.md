@@ -5,7 +5,7 @@ Donate link: https://paypal.me/qriouslad
 Tags: php variables, variable dump, debug, developer  
 Requires at least: 4.8  
 Tested up to: 6.0.2  
-Stable tag: 1.6.0  
+Stable tag: 1.7.0  
 Requires PHP: 5.6  
 License: GPLv2 or later  
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -61,9 +61,13 @@ Variable Inspector was built with: [WordPress Plugin Boilerplate](https://github
 
 ## Changelog
 
+### 1.7.0 (2022.10.11)
+
+* Add viewer (function) selector, e.g. print_r, that will apply to all inspection results after the selection is made and will persist after page reload. The selection is stored in wp_options table. Different viewer can still be selected for each result. Props to [@pexlechris](https://profiles.wordpress.org/pexlechris/) for [the feedback](https://wordpress.org/support/topic/awsome-plugin-that-every-developer-need-it/).
+
 ### 1.6.0 (2022.10.11)
 
-* Add toggle to expand or collapse all inspection results
+* Add toggle to expand or collapse all inspection results. Props to [@pexlechris](https://profiles.wordpress.org/pexlechris/) for [the feedback](https://wordpress.org/support/topic/awsome-plugin-that-every-developer-need-it/).
 
 ### 1.5.0 (2022.10.09)
 
