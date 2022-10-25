@@ -196,6 +196,8 @@ class Variable_Inspector {
 
 		$this->loader->add_action( 'wp_ajax_vi_set_viewer', $plugin_admin, 'vi_set_viewer' );
 
+		$this->loader->add_action( 'admin_notices', $plugin_admin, 'vi_suppress_admin_notices', 5 ); // Load early with priority 5 (default is 10)
+
 	}
 
 	/**
