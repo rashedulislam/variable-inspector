@@ -148,15 +148,15 @@ class Variable_Inspector_Admin {
 
 		if ( false === $result ) {
 
-			$variable_type = sanitize_text_field( gettype( $args[1] ) );
+			$variable_type = gettype( $args[1] );
 
-			$variable_name = sanitize_title( $args[0] );
+			$variable_name = $args[0];
 
-			$variable_content = sanitize_text_field( maybe_serialize( $args[1] ) );
+			$variable_content = maybe_serialize( $args[1] );
 
 			if ( !empty( $args[2] ) ) {
 
-				$file_path = sanitize_text_field( str_replace( ABSPATH, '', $args[2] ) );
+				$file_path = str_replace( ABSPATH, '', $args[2] );
 
 			} else {
 
