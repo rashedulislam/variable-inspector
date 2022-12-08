@@ -538,7 +538,7 @@ class Variable_Inspector_Admin {
 	}
 
 	/**
-	 * To stop other plugins' admin notices overlaying in the Debug Log Manager UI, remove them.
+	 * To stop other plugins' admin notices overlaying in the Variable Inspector UI, remove them.
 	 *
 	 * @hooked admin_notices
 	 *
@@ -550,6 +550,23 @@ class Variable_Inspector_Admin {
 
 		if ( 'variable-inspector' === $plugin_page ) {
 			remove_all_actions( 'admin_notices' );
+		}
+
+	}
+
+	/**
+	 * To stop other plugins' admin notices overlaying in the Variable Inspector UI, remove them.
+	 *
+	 * @hooked admin_notices
+	 *
+	 * @since 1.7.2
+	 */
+	public function vi_suppress_all_admin_notices() {
+
+		global $plugin_page;
+
+		if ( 'variable-inspector' === $plugin_page ) {
+			remove_all_actions( 'all_admin_notices' );
 		}
 
 	}

@@ -33,6 +33,10 @@
     display: flex;
 }
 
+.vi-header .notice {
+    display: none;
+}
+
 .vi-body {
     padding: 20px;
     background-color: #fff;
