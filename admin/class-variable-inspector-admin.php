@@ -148,15 +148,15 @@ class Variable_Inspector_Admin {
 
 		if ( false === $result ) {
 
-			$variable_type = sanitize_text_field( gettype( $args[1] ) );
+			$variable_type = gettype( $args[1] );
 
-			$variable_name = sanitize_title( $args[0] );
+			$variable_name = $args[0];
 
-			$variable_content = sanitize_text_field( maybe_serialize( $args[1] ) );
+			$variable_content = maybe_serialize( $args[1] );
 
 			if ( !empty( $args[2] ) ) {
 
-				$file_path = sanitize_text_field( str_replace( ABSPATH, '', $args[2] ) );
+				$file_path = str_replace( ABSPATH, '', $args[2] );
 
 			} else {
 
@@ -538,7 +538,7 @@ class Variable_Inspector_Admin {
 	}
 
 	/**
-	 * To stop other plugins' admin notices overlaying in the Debug Log Manager UI, remove them.
+	 * To stop other plugins' admin notices overlaying in the Variable Inspector UI, remove them.
 	 *
 	 * @hooked admin_notices
 	 *
@@ -550,6 +550,23 @@ class Variable_Inspector_Admin {
 
 		if ( 'variable-inspector' === $plugin_page ) {
 			remove_all_actions( 'admin_notices' );
+		}
+
+	}
+
+	/**
+	 * To stop other plugins' admin notices overlaying in the Variable Inspector UI, remove them.
+	 *
+	 * @hooked admin_notices
+	 *
+	 * @since 1.7.2
+	 */
+	public function vi_suppress_all_admin_notices() {
+
+		global $plugin_page;
+
+		if ( 'variable-inspector' === $plugin_page ) {
+			remove_all_actions( 'all_admin_notices' );
 		}
 
 	}
