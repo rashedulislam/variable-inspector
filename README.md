@@ -5,7 +5,7 @@ Donate link: https://paypal.me/qriouslad
 Tags: php variables, variable dump, debug, developer  
 Requires at least: 4.8  
 Tested up to: 6.0.2  
-Stable tag: 1.7.1  
+Stable tag: 1.8.0  
 Requires PHP: 5.6  
 License: GPLv2 or later  
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -47,6 +47,8 @@ This would help you locate and clean up the inspector lines once you're done deb
 * [Debug Log Manager](https://wordpress.org/plugins/debug-log-manager/): Log PHP, database and JavaScript errors via WP_DEBUG with one click. Conveniently create, view, filter and clear the debug.log file.
 * [Code Explorer](https://wordpress.org/plugins/code-explorer/): Fast directory explorer and file/code viewer with syntax highlighting.
 * [Database Admin](https://github.com/qriouslad/database-admin): Securely manage your WordPress website's database with a clean and user-friendly interface based on a custom-themed Adminer app. Only available on Github.
+* [Admin and Site Enhancements](https://wordpress.org/plugins/admin-site-enhancements/) helps you to easily enhance various admin workflows and site aspects while replacing multiple plugins doing it.
+* [Flexible Scroll Top](https://wordpress.org/plugins/flexible-scroll-top/) and [Floating Share Buttons](https://wordpress.org/plugins/floating-share-button/) is a lightweight combo with minimalist UI.
 
 ## Screenshots
 
@@ -61,9 +63,14 @@ Variable Inspector was built with: [WordPress Plugin Boilerplate](https://github
 
 ## Changelog
 
+### 1.8.0 (2022.12.08)
+
+* Fix an issue where sometimes inspection shows empty or false result when result type is array or object.
+* Additional suppression of admin notices via all_admin_notices hook and via CSS.
+
 ### 1.7.1 (2022.10.25)
 
-* All admin notices are now suppressed, i.e. no longer shown, on the Variable Inspector page
+* All admin notices are now suppressed, i.e. no longer shown, on the Variable Inspector page.
 
 ### 1.7.0 (2022.10.11)
 
